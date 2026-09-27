@@ -150,14 +150,14 @@ contract TributaryFlow is FlowBase {
 
     function setPaused(uint256 id, bool paused) external onlyParty(id) {
         Stream storage s = _streams[id];
-        // settle pending accrual before changing state so accounting stays exact
+        // settle pending accrual and reset the clock so paused time never counts
         uint256 due = _accrued(s);
         if (due > 0) {
             s.balance -= due;
-            s.lastSettled = uint64(block.timestamp);
             _push(s.recipient, due);
             emit Settled(id, s.recipient, due, s.balance);
         }
+        s.lastSettled = uint64(block.timestamp);
         s.paused = paused;
         emit PauseToggled(id, paused);
     }

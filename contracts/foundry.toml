@@ -10,5 +10,5 @@ optimizer_runs = 200
 rpc_endpoints = { arc_testnet = "https://rpc.testnet.arc.io", arc_mainnet = "https://rpc.mainnet.arc.io" }
 
 [etherscan]
-arc_testnet = { key = "${ARCSCAN_API_KEY}", url = "https://explorer.testnet.arc.io/api" }
+arc_testnet = { key = "${ARCSCAN_API_KEY}", url = "https://testnet.arcscan.app/api" }
 arc_mainnet = { key = "${ARCSCAN_API_KEY}", url = "https://explorer.arc.io/api" }
