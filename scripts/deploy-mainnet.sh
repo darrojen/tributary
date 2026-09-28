@@ -5,6 +5,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/../contracts"
 
+# Load .env from project root if present
+if [ -f "../.env" ]; then set -a; source ../.env; set +a; fi
+
 if [ -z "${DEPLOYER_PRIVATE_KEY:-}" ]; then
   echo "❌ Set DEPLOYER_PRIVATE_KEY in .env first (see .env.example)"
   exit 1
