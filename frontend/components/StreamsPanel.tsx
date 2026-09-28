@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPublicClient, http, parseAbiItem } from "viem";
-import { arcTestnet } from "viem/chains";
+import { NETWORK_CHAIN, NETWORK_RPC, NETWORK_EXPLORER, LISTING_FROM_BLOCK } from "../lib/network";
 import { useWallet } from "../lib/wallet";
 import { writeAndWait } from "../lib/tx";
 import { USDC_ADDRESS, FLOW_ADDRESS, EXPLORER, fmtUsdc } from "../lib/addresses";
@@ -22,8 +22,8 @@ type StreamRow = {
 const STREAM_CREATED = parseAbiItem(
   "event StreamCreated(uint256 indexed id, address indexed payer, address indexed recipient, uint256 ratePerSecond, uint256 funded, uint64 start)"
 );
-/** Deploy block of TributaryFlow on Arc testnet (deployed ~block 64,323,900). */
-const FROM_BLOCK = 64_323_000n;
+/** Earliest block scanned for StreamCreated events (deploy block, or 0 = whole chain). */
+const FROM_BLOCK = LISTING_FROM_BLOCK;
 /** Arc public RPC caps getLogs ranges — scan in slices below the cap. */
 const CHUNK = 10_000n;
 let scannedThrough: bigint = FROM_BLOCK - 1n;
@@ -57,7 +57,7 @@ export function StreamsPanel() {
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    const client = createPublicClient({ chain: arcTestnet, transport: http("https://rpc.testnet.arc.io") });
+    const client = createPublicClient({ chain: NETWORK_CHAIN, transport: http(NETWORK_RPC) });
 
     const load = async () => {
       try {
@@ -223,7 +223,7 @@ function StreamCard({
     !!myAddress &&
     (myAddress.toLowerCase() === s.payer.toLowerCase() || myAddress.toLowerCase() === s.recipient.toLowerCase());
   const isPayer = !!myAddress && myAddress.toLowerCase() === s.payer.toLowerCase();
-  const explorer = EXPLORER[chainId ?? 5042002] ?? "https://testnet.arcscan.app";
+  const explorer = EXPLORER[chainId ?? NETWORK_CHAIN.id] ?? NETWORK_EXPLORER;
   const perSec = Number(s.ratePerSecond) / 1e6;
 
   const act = useCallback(

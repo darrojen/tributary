@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createPublicClient, http, parseAbiItem } from "viem";
-import { arcTestnet } from "viem/chains";
+import { NETWORK_CHAIN, NETWORK_RPC, LISTING_FROM_BLOCK } from "../lib/network";
 import { useWallet } from "../lib/wallet";
 import { writeAndWait } from "../lib/tx";
 import { USDC_ADDRESS, SPLIT_ADDRESS } from "../lib/addresses";
@@ -13,8 +13,8 @@ type SplitRow = { id: bigint; payees: string[]; sharesBps: number[] };
 const SPLIT_CREATED = parseAbiItem(
   "event SplitCreated(uint256 indexed id, address indexed owner, address[] payees, uint16[] sharesBps)"
 );
-/** Deploy block of TributarySplit on Arc testnet. */
-const FROM_BLOCK = 64_323_000n;
+/** Earliest block scanned for SplitCreated events (deploy block, or 0 = whole chain). */
+const FROM_BLOCK = LISTING_FROM_BLOCK;
 const CHUNK = 10_000n;
 let scannedThrough: bigint = FROM_BLOCK - 1n;
 const maxUint = 2n ** 256n - 1n;
@@ -49,7 +49,7 @@ export function SplitsPanel() {
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    const client = createPublicClient({ chain: arcTestnet, transport: http("https://rpc.testnet.arc.io") });
+    const client = createPublicClient({ chain: NETWORK_CHAIN, transport: http(NETWORK_RPC) });
 
     const load = async () => {
       try {

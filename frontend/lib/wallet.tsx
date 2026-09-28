@@ -11,9 +11,10 @@ import {
   type WalletClient,
 } from "viem";
 import { arc, arcTestnet } from "viem/chains";
+import { NETWORK_CHAIN, NETWORK_RPC } from "./network";
 
 /** Arc ships as built-in viem chains — docs.arc.io/arc/references/connect-to-arc */
-export const SUPPORTED = [arcTestnet, arc];
+export const SUPPORTED = [NETWORK_CHAIN];
 export const CHAINS: Record<number, Chain> = {
   [arcTestnet.id]: arcTestnet,
   [arc.id]: arc,
@@ -22,6 +23,8 @@ export const RPC: Record<number, string> = {
   [arcTestnet.id]: "https://rpc.testnet.arc.io",
   [arc.id]: "https://rpc.mainnet.arc.io",
 };
+/** RPC for the network this build targets. */
+export { NETWORK_RPC };
 
 /* ---------------- EIP-6963 multi-wallet discovery ---------------- */
 
@@ -132,7 +135,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     const chain = CHAINS[chainId];
     return chain
       ? createPublicClient({ chain, transport: http(RPC[chainId]) })
-      : createPublicClient({ transport: http("https://rpc.testnet.arc.io") });
+      : createPublicClient({ transport: http(NETWORK_RPC) });
   }, [chainId]);
 
   const walletClient = useMemo(() => {

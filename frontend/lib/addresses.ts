@@ -1,4 +1,7 @@
 import { Address } from "viem";
+import { NETWORK_CHAIN } from "./network";
+
+export { CHAIN_ID } from "./network";
 
 /** Arc native USDC ERC-20 interface address (identical on mainnet & testnet). */
 export const USDC_ADDRESS: Address = "0x3600000000000000000000000000000000000000";
@@ -16,6 +19,9 @@ export const EXPLORER: Record<number, string> = {
   5042002: "https://testnet.arcscan.app",
   5042: "https://explorer.arc.io",
 };
+
+/** Explorer URL for the network this build targets. */
+export const NETWORK_EXPLORER_URL = EXPLORER[NETWORK_CHAIN.id];
 
 export function fmtUsdc(raw: bigint | undefined): string {
   if (raw === undefined) return "—";

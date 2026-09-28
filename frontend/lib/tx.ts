@@ -1,7 +1,8 @@
 import { createPublicClient, encodeFunctionData, http, maxUint256, parseGwei, type Abi, type Address, type Chain, type Hex } from "viem";
 import { CHAINS, RPC } from "./wallet";
+import { NETWORK_RPC } from "./network";
 
-const FALLBACK_RPC = "https://rpc.testnet.arc.io";
+const FALLBACK_RPC = NETWORK_RPC;
 
 /** Build a client that never throws on unknown chain ids (e.g. wallet on Ethereum mainnet). */
 function safeClient(chainId: number) {

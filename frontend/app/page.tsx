@@ -9,7 +9,7 @@ import { ERC20_ABI } from "../lib/abis";
 import { StreamsPanel } from "../components/StreamsPanel";
 import { SplitsPanel } from "../components/SplitsPanel";
 import { TributaryLockup, TributaryMark } from "../components/Logo";
-import { arcTestnet } from "viem/chains";
+import { NETWORK_CHAIN, NETWORK_LABEL, NETWORK_EXPLORER } from "../lib/network";
 
 const ZERO = "0x0000000000000000000000000000000000000000";
 
@@ -21,8 +21,7 @@ export default function Home() {
 
   const contractsReady = FLOW_ADDRESS !== ZERO && SPLIT_ADDRESS !== ZERO;
   const onSupported = !!chainId && SUPPORTED.some((c) => c.id === chainId);
-  const isTestnet = chainId === arcTestnet.id;
-  const explorer = EXPLORER[chainId ?? 0];
+  const explorer = EXPLORER[chainId ?? 0] ?? NETWORK_EXPLORER;
 
   useEffect(() => {
     if (!address || !chainId || !onSupported) return;
@@ -85,7 +84,7 @@ export default function Home() {
             <span className="notice-icon">◇</span>
             <div>
               <b>Unsupported network.</b> Tributary runs on Arc.
-              <button className="btn btn-primary btn-sm inline-cta" onClick={() => switchTo(arcTestnet.id)}>
+              <button className="btn btn-primary btn-sm inline-cta" onClick={() => switchTo(NETWORK_CHAIN.id)}>
                 Switch to Arc Testnet
               </button>
             </div>
@@ -94,7 +93,7 @@ export default function Home() {
 
         <section className="hero">
           <div className="hero-badge">
-            <span className="dot" /> Live on Arc · {isTestnet ? "Testnet" : "Mainnet"}
+            <span className="dot" /> Live on Arc · {NETWORK_LABEL}
           </div>
           <h1>
             Money that moves

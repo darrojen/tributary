@@ -32,7 +32,7 @@ The script broadcasts both contracts and verifies them on the explorer. Note the
 
 ## 4. Point the frontend at your contracts
 ```bash
-cp frontend/.env.local.example frontend/.env.local
+cp frontend/.env.example frontend/.env.local
 # edit: NEXT_PUBLIC_FLOW_ADDRESS=0x…   NEXT_PUBLIC_SPLIT_ADDRESS=0x…
 ```
 
