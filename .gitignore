@@ -9,3 +9,4 @@ frontend/.next/
 *.log
 .DS_Store
 frontend/tf-deps.tgz
+.freebuff/
